@@ -5,6 +5,7 @@ import 'ammap3/ammap/ammap';
 import 'amcharts3/amcharts/themes/light';
 
 import Card from './components/Card';
+import Timeline from './components/Timeline';
 
 import './App.css';
 
@@ -164,7 +165,7 @@ class App extends Component {
       startYear: 1800,
       endYear: new Date().getFullYear(),
       year: 1800,
-      scrollBuffer: 50,
+      scrollBuffer: 20,
       startIndex: 0,
       startDates: {},
       endDates: {},
@@ -253,9 +254,11 @@ class App extends Component {
         <div className="map">
           <AmCharts.React style={{ width: "90%", height: "90vh" }} options={config} />
         </div>
-        <div className="timeline">
-          {this.state.year}
-        </div>
+        <Timeline 
+          year={this.state.year} 
+          start={this.state.startYear}
+          end={this.state.endYear}
+        />
       </div>
     );
   }
