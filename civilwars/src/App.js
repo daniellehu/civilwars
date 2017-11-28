@@ -40,16 +40,39 @@ class App extends Component {
     window.removeEventListener('mousewheel', throttle(this.handleScroll.bind(this), 100));
   }
 
+  generateMapElement(item) {
+    const elements = [];
+    const casualties = (item.casualties) ? item.casualties : 'Unknown';
+    const color = "#FFFFFF";
+
+    for (let country of item.locations) {
+      elements.push({
+        title: item.name,
+        groupId: item.name,
+        casualties: casualties,
+        color: color,
+        id: isoCountries[country],
+      });
+    }
+   
+    return elements;
+  }
+
   handleScroll(event) {
 
     if (event.deltaY > this.state.scrollBuffer) {
       if (this.state.year === this.state.endYear + 1) return;
       this.setState({ year: this.state.year + 1 }, function() {
-        let wars = this.state.wars;
+        let wars = this.state.wars.slice();
+        let areas = this.state.areas.slice();
 
         // add civil wars
         const addWars = this.state.startDates[this.state.year];
         if (addWars) {
+          for (let war of addWars) {
+            const mapElem = this.generateMapElement(war);
+            areas = areas.concat(mapElem);
+          }
           wars = wars.concat(addWars);
         }
 
@@ -60,6 +83,11 @@ class App extends Component {
             for (let current = 0; current < wars.length; current++) {
               if (wars[current].name === war.name) {
                 wars.splice(current, 1);
+                for (let areaIndex = areas.length-1; areaIndex >= 0; areaIndex--) {
+                  if (areas[areaIndex].groupId === war.name) {
+                    areas.splice(areaIndex, 1);
+                  }
+                }
                 break;
               }
             }
@@ -68,16 +96,22 @@ class App extends Component {
 
         this.setState({
           wars: wars,
+          areas: areas,
         });
       });
     } else if (event.deltaY < -1 * this.state.scrollBuffer) {
       if (this.state.year === this.state.startYear) return;
       this.setState({ year: this.state.year - 1 }, function() {
-        let wars = this.state.wars;
+        let wars = this.state.wars.slice();
+        let areas = this.state.areas.slice();
 
         // add civil wars
         const addWars = this.state.endDates[this.state.year];
         if (addWars) {
+          for (let war of addWars) {
+            const mapElem = this.generateMapElement(war);
+            areas = areas.concat(mapElem);
+          }
           wars = wars.concat(addWars);
         }
 
@@ -88,6 +122,11 @@ class App extends Component {
             for (let current = 0; current < wars.length; current++) {
               if (wars[current].name === war.name) {
                 wars.splice(current, 1);
+                for (let areaIndex = areas.length-1; areaIndex >= 0; areaIndex--) {
+                  if (areas[areaIndex].groupId === war.name) {
+                    areas.splice(areaIndex, 1);
+                  }
+                }
                 break;
               }
             }
@@ -96,6 +135,7 @@ class App extends Component {
 
         this.setState({
           wars: wars,
+          areas: areas,
         });
       });
     }
@@ -105,7 +145,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      areas: [{ id: 'AR', showAsSelected: true,  }],
+      areas: [],
       wars: [],
       startYear: 1800,
       endYear: new Date().getFullYear(),
@@ -126,7 +166,9 @@ class App extends Component {
       backgroundColor : "#1C1C1D",
       backgroundAlpha : 1,
       zoomControl: {
-      zoomControlEnabled : true
+        zoomControlEnabled : false,
+        panControlEnabled : false,
+        homeButtonEnabled: false,
       },
       dataProvider : {
         map : "worldLow",
@@ -134,21 +176,25 @@ class App extends Component {
         areas : this.state.areas,
       },
       areasSettings : {
-      autoZoom : true,
-      color : "#B4B4B7",
-      colorSolid : "#84ADE9",
-      selectedColor : "#FFFFFF",
-      outlineColor : "#666666",
-      rollOverColor : "#9EC2F7",
-      rollOverOutlineColor : "#000000"
+        autoZoom : false,
+        color : "#B4B4B7",
+        colorSolid : "#84ADE9",
+        selectedColor : "#FFFFFF",
+        outlineColor : "#666666",
+        rollOverColor : "#9EC2F7",
+        rollOverOutlineColor : "#000000"
       },
       export : false,
     };
-
+    
     return (
       <div className="App">
-        <AmCharts.React style={{ width: "100%", height: "500px" }} options={config} />
-        <div>{this.state.year}</div>
+        <div className="map">
+          <AmCharts.React style={{ width: "90%", height: "90vh" }} options={config} />
+        </div>
+        <div className="timeline">
+          {this.state.year}
+        </div>
       </div>
     );
   }

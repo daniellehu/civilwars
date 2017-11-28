@@ -8,14 +8,6 @@ const civilwars = [
         description: 'The Argentine Civil Wars were a series of internecine wars that took place in Argentina from 1814 to 1880. These conflicts were separate from the Argentine War of Independence (1810–1820), though they first arose during this period.',
         wiki: 'https://en.wikipedia.org/wiki/Argentine_Civil_Wars',
     }, {
-        name: 'Argentine loop Wars',
-        started: 1814,
-        ended: 1819,
-        casualties: null,
-        locations: ['Argentina', 'Uruguay'],
-        description: 'The Argentine Civil Wars were a series of internecine wars that took place in Argentina from 1814 to 1880. These conflicts were separate from the Argentine War of Independence (1810–1820), though they first arose during this period.',
-        wiki: 'https://en.wikipedia.org/wiki/Argentine_Civil_Wars',
-    }, {
         name: 'Ndwandwe-Zulu War',
         started: 1817,
         ended: 1819,
