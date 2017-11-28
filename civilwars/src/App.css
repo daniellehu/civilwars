@@ -1,10 +1,31 @@
+@font-face {
+  font-family: 'Bembo';
+  src: url('./fonts/BemboStd.otf');
+}
+
+@font-face {
+  font-family: 'Bembo-Bold';
+  src: url('./fonts/BemboStd-Bold.otf');
+}
+
+@font-face {
+  font-family: 'Bembo-Semibold';
+  src: url('./fonts/BemboStd-Semibold.otf');
+}
+
 .App {
   background-color: #1C1C1D;
   height: 100vh;
+  font-family: 'Bembo';
 }
 
 .map {
   padding: 30px;
+}
+
+.card {
+  position: fixed;
+  background-color: white;
 }
 
 .timeline {
