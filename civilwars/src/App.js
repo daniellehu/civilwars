@@ -36,10 +36,12 @@ class App extends Component {
   
   componentDidMount() {
     window.addEventListener('mousewheel', this.handleScroll.bind(this));
+    window.addEventListener('click', this.handleClick.bind(this));
   }
 
   componentWillUnmount() {
     window.removeEventListener('mousewheel', this.handleScroll.bind(this));
+    window.removeEventListener('click', this.handleClick.bind(this));
   }
 
   generateMapElement(item) {
@@ -58,6 +60,16 @@ class App extends Component {
     }
    
     return elements;
+  }
+
+  handleClick(event) {  
+    if (event.target.id !== 'selected' &&
+        event.target.parentElement.id !== 'selected' &&
+        event.target.parentElement.parentElement.id !== 'selected') {
+      this.setState({
+        selectedWar: null,
+      });
+    }
   }
 
   handleScroll(event) {

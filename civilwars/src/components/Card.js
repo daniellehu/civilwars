@@ -24,7 +24,7 @@ class Card extends Component {
     const casualties = (this.props.war.casualties) ? this.props.war.casualties : 'Unknown';
 
     return (
-      <div className="card" style={{ left: left, top: top }}>
+      <div className="card" id="selected" style={{ left: left, top: top }}>
         <h3 className="title">{this.props.war.name}</h3>
 
         <p className="info">
