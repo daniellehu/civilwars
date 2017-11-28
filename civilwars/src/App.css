@@ -26,6 +26,8 @@
 .card {
   position: fixed;
   background-color: white;
+  width: 300px;
+  padding: 5px 20px;
 }
 
 .timeline {
@@ -38,4 +40,31 @@
   color: #ffffff;
   font-size: 1.5em;
   text-align: center;
+}
+
+.bolded {
+  font-family: 'Bembo-Bold';
+}
+
+.title {
+  font-size: 21px;
+  font-family: 'Bembo-SemiBold';
+}
+
+.info {
+  font-size: 14px;
+  margin: 0;
+}
+
+.description {
+  font-size: 12px;
+}
+
+.link {
+  color: #8BC2EF;
+  text-decoration: none;
+}
+
+.link:hover {
+  color: rgb(113, 180, 235);
 }
