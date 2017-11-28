@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import AmCharts from "@amcharts/amcharts3-react";
-import throttle from "lodash/throttle";
 import 'amcharts3/amcharts/amcharts';
 import 'ammap3/ammap/ammap';
 import 'amcharts3/amcharts/themes/light';
+
+import Card from './components/Card';
+
 import './App.css';
 
-import civilwars from './Data/data_wars';
-import isoCountries from './Data/data_countries';
+import civilwars from './data/data_wars';
+import isoCountries from './data/data_countries';
 
 
 class App extends Component {
@@ -33,25 +35,25 @@ class App extends Component {
   }
   
   componentDidMount() {
-    window.addEventListener('mousewheel', throttle(this.handleScroll.bind(this), 100));
+    window.addEventListener('mousewheel', this.handleScroll.bind(this));
   }
 
   componentWillUnmount() {
-    window.removeEventListener('mousewheel', throttle(this.handleScroll.bind(this), 100));
+    window.removeEventListener('mousewheel', this.handleScroll.bind(this));
   }
 
   generateMapElement(item) {
     const elements = [];
-    const casualties = (item.casualties) ? item.casualties : 'Unknown';
+    // const casualties = (item.casualties) ? item.casualties : 'Unknown';
     const color = "#FFFFFF";
 
     for (let country of item.locations) {
       elements.push({
         title: item.name,
         groupId: item.name,
-        casualties: casualties,
         color: color,
         id: isoCountries[country],
+        selectable: true,
       });
     }
    
@@ -154,17 +156,22 @@ class App extends Component {
       startIndex: 0,
       startDates: {},
       endDates: {},
+      selectedWar: null,
+      selectedX: null,
+      selectedY: null,
     };
   }
 
 
   render() {
+    const self = this;
     const config = {
       type: "map",
       theme: "black",
       panEventsEnabled : true,
       backgroundColor : "#1C1C1D",
       backgroundAlpha : 1,
+      zoomOnDoubleClick: false,
       zoomControl: {
         zoomControlEnabled : false,
         panControlEnabled : false,
@@ -175,17 +182,59 @@ class App extends Component {
         getAreasFromMap : true,
         areas : this.state.areas,
       },
+      balloon: {
+      },
       areasSettings : {
         autoZoom : false,
         color : "#B4B4B7",
         colorSolid : "#84ADE9",
         selectedColor : "#FFFFFF",
         outlineColor : "#666666",
-        rollOverColor : "#9EC2F7",
-        rollOverOutlineColor : "#000000"
+        rollOverColor : "#B4B4B7",
+        rollOverOutlineColor : "#666666",
       },
       export : false,
+      listeners: [{
+        event: "clickMapObject",
+        method: function(event) {
+          const selectedTitle = event.mapObject["title"];
+          const selectedX = event.event.clientX;
+          const selectedY = event.event.clientY;
+          let selectedWar = null;
+          
+          for (let war of self.state.wars) {
+            if (war.name === selectedTitle) {
+              selectedWar = war;
+              break;
+            }
+          }
+
+          self.setState({ 
+            selectedWar: selectedWar,
+            selectedX: selectedX,
+            selectedY: selectedY,
+          });
+        }
+      }]
     };
+
+    if (this.state.selectedWar) {
+      return (
+        <div className="App">
+          <div className="map">
+            <AmCharts.React style={{ width: "90%", height: "90vh" }} options={config} />
+            <Card
+              war={this.state.selectedWar}
+              x={this.state.selectedX}
+              y={this.state.selectedY}
+            />
+          </div>
+          <div className="timeline">
+            {this.state.year}
+          </div>
+        </div>
+      );
+    }
     
     return (
       <div className="App">
