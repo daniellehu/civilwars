@@ -18,6 +18,7 @@ class App extends Component {
   componentWillMount() {
     const startDates = {};
     const endDates = {};
+    let totalCasualties = 0;
     for (let war of civilwars) {
       if (war.started in startDates) {
         startDates[war.started].push(war);
@@ -30,9 +31,13 @@ class App extends Component {
       } else {
         endDates[war.ended] = [war];
       }
-    }
 
-    this.setState({startDates: startDates, endDates: endDates});
+      if (war.casualties) {
+        totalCasualties += war.casualties;
+      }
+    }
+    
+    this.setState({startDates: startDates, endDates: endDates, avgCasualty: totalCasualties / civilwars.length});
   }
   
   componentDidMount() {
@@ -47,9 +52,15 @@ class App extends Component {
 
   generateMapElement(item) {
     const elements = [];
-    // const casualties = (item.casualties) ? item.casualties : 'Unknown';
-    const color = "#FFFFFF";
+    let casualtyRating = 100;
 
+    if (item.casualties) {
+      casualtyRating = Math.max(casualtyRating - 
+                      (Math.min(item.casualties, this.state.avgCasualty) / 
+                      this.state.avgCasualty) * 50, 50);
+    }
+    
+    const color = "hsl(0, 80%, " + casualtyRating.toString() + "%)";
     for (let country of item.locations) {
       elements.push({
         title: item.name,
@@ -162,13 +173,15 @@ class App extends Component {
     this.state = {
       areas: [],
       wars: [],
+      year: 1800,
+      
+      scrollBuffer: 20,
       startYear: 1800,
       endYear: new Date().getFullYear(),
-      year: 1800,
-      scrollBuffer: 20,
-      startIndex: 0,
       startDates: {},
       endDates: {},
+      avgCasualty: 0,
+
       selectedWar: null,
       selectedX: null,
       selectedY: null,
@@ -200,13 +213,18 @@ class App extends Component {
       areasSettings : {
         autoZoom : false,
         color : "#B4B4B7",
-        colorSolid : "#84ADE9",
+        colorSolid : "#E61A1A",
         selectedColor : "#FFFFFF",
         outlineColor : "#666666",
         rollOverColor : "#B4B4B7",
-        rollOverOutlineColor : "#666666",
+        rollOverOutlineColor : "#FFFFFF",
       },
       export : false,
+      valueLegend: {
+        minValue: "Unknown",
+        maxValue: "> " + Math.round(this.state.avgCasualty).toString() + " casualties",
+        color: "#FFFFFF",
+      },
       listeners: [{
         event: "clickMapObject",
         method: function(event) {
@@ -242,9 +260,11 @@ class App extends Component {
               y={this.state.selectedY}
             />
           </div>
-          <div className="timeline">
-            {this.state.year}
-          </div>
+          <Timeline 
+            year={this.state.year} 
+            start={this.state.startYear}
+            end={this.state.endYear}
+          />
         </div>
       );
     }
