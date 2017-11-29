@@ -4,12 +4,28 @@ import '../App.css';
 const LINEHEIGHT = 80; // for 80vh
 const YEAR_OFFSET = 10;
 const CURSOR_OFFSET = 11;
+const MAPSTART = 1800
 
 class Timeline extends Component {
 
   render() {
-    const total = this.props.end - this.props.start;
-    const offset = ((this.props.year - this.props.start) / total) * LINEHEIGHT;
+    const total = this.props.end - MAPSTART;
+    const offset = ((this.props.year - MAPSTART) / total * LINEHEIGHT);
+
+    if (this.props.isMobile) {
+        return (
+            <div className="timeline-mobile"
+                onMouseDown={(e) => this.props.toggleChangeYear(e, true)}
+                onMouseUp={(e) => this.props.toggleChangeYear(e, false)}
+                onMouseMove={this.props.changeYear}
+            >
+              <div style={{ left: offset + "%" }} className="year-mobile">
+                  {this.props.year}
+              </div>
+              <div id="mobile-line" className="timeline-line-mobile"></div>
+            </div>
+          );
+    }
 
     return (
       <div className="timeline">

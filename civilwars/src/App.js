@@ -12,6 +12,7 @@ import './App.css';
 import civilwars from './data/data_wars';
 import isoCountries from './data/data_countries';
 
+const MOBILE_WIDTH = 850;
 
 class App extends Component {
 
@@ -43,11 +44,13 @@ class App extends Component {
   componentDidMount() {
     window.addEventListener('mousewheel', this.handleScroll.bind(this));
     window.addEventListener('click', this.handleClick.bind(this));
+    window.addEventListener('resize', this.handleResize.bind(this));
   }
 
   componentWillUnmount() {
     window.removeEventListener('mousewheel', this.handleScroll.bind(this));
     window.removeEventListener('click', this.handleClick.bind(this));
+    window.addEventListener('resize', this.handleResize.bind(this));
   }
 
   generateMapElement(item) {
@@ -74,7 +77,67 @@ class App extends Component {
     return elements;
   }
 
-  handleClick(event) {  
+  toggleChangeYear(event, status) {
+    this.setState({ changeYearStatus: status });
+  }
+
+  changeYear(event) {
+    if (this.state.changeYearStatus) {
+      const timelineWidth = document.getElementById('mobile-line').offsetWidth;
+      const current = Math.min(event.clientX, timelineWidth);
+      const year = 1800 + Math.round((current / timelineWidth) * (this.state.endYear - this.state.startYear + 1));
+      this.setState({ year: year }, function() {
+        let wars = this.state.wars.slice();
+        let areas = this.state.areas.slice();
+
+        // remove outdated civil wars
+        for (let i = wars.length - 1; i >= 0; i--) {
+          if (wars[i].ended < year) {
+            const removedWar = wars.splice(i, 1);
+            for (let j = areas.length - 1; j >= 0; j--) {
+              if (removedWar.name === areas[j].groupId) {
+                areas.splice(j, 1);
+              }
+            }
+          }
+        }
+
+        // add existing civil wars
+        const addWars = [];
+        console.log(this.state.lastYear);
+        for (let y = this.state.lastYear; y < year; y++) {
+          if (this.state.startDates[y]) { 
+            for (let war of this.state.startDates[y]) {
+              if (war.ended >= this.state.year) {
+                addWars.push(war);
+              }
+            }
+          }
+        }
+        if (addWars) {
+          for (let addWar of addWars) {
+            const mapElem = this.generateMapElement(addWar);
+            areas = areas.concat(mapElem);
+          }
+          wars = wars.concat(addWars);
+        }
+
+        this.setState({
+          wars: wars,
+          areas: areas,
+          startYear: year,
+        });
+      });
+      }
+  }
+
+  handleResize(event) {
+    this.setState({ isMobile: event.target.innerWidth <= MOBILE_WIDTH });
+  }
+
+  handleClick(event) {
+    if (this.state.year < 1800 || this.state.isMobile) return;
+    
     if (event.target.id !== 'selected' &&
         event.target.parentElement.id !== 'selected' &&
         event.target.parentElement.parentElement.id !== 'selected') {
@@ -85,6 +148,7 @@ class App extends Component {
   }
 
   handleScroll(event) {
+    if (this.state.isMobile) return;
 
     if (event.deltaY > this.state.scrollBuffer) {
       if (this.state.year === this.state.endYear + 1) return;
@@ -123,6 +187,7 @@ class App extends Component {
         this.setState({
           wars: wars,
           areas: areas,
+          lastYear: this.state.year,
         });
       });
     } else if (event.deltaY < -1 * this.state.scrollBuffer) {
@@ -162,6 +227,7 @@ class App extends Component {
         this.setState({
           wars: wars,
           areas: areas,
+          lastYear: this.state.year,
         });
       });
     }
@@ -173,7 +239,9 @@ class App extends Component {
     this.state = {
       areas: [],
       wars: [],
-      year: 1800,
+      year: 1780,
+      lastYear: 1780,
+      changeYearStatus: false,
       
       scrollBuffer: 20,
       startYear: 1800,
@@ -185,11 +253,59 @@ class App extends Component {
       selectedWar: null,
       selectedX: null,
       selectedY: null,
+
+      isMobile: window.innerWidth <= MOBILE_WIDTH,
     };
+  }
+
+  renderMobileCards(wars) {
+    return wars.map((war) => {
+      return <div key={war.name}>
+        <Card
+          war={war}
+          isMobile={this.state.isMobile}
+        />
+      </div>
+    });
   }
 
 
   render() {
+
+    if (this.state.isMobile) {
+      if (this.state.year < this.state.startYear) {
+      const opacity = (this.state.startYear - this.state.year) / 20;
+      return (
+        <div className="App mobile-intro intro">
+          <h1><span className="fade" style={{ opacity: opacity}}>Civil Wars</span></h1>
+          <h4>
+            <span className="fade"  style={{ opacity: opacity }}>from </span> 
+            1800 <span className="fade" style={{ opacity: opacity }}>to today </span>
+          </h4>
+          <div className="floater">
+            <i onClick={() => this.setState({year: 1800, lastYear: 1800})} 
+          className="fa fa-angle-double-right"></i></div>
+        </div>
+      )
+      } else {
+        return (
+          <div className="App">
+            <Timeline
+              isMobile={this.state.isMobile}
+              changeYear={this.changeYear.bind(this)}
+              toggleChangeYear={this.toggleChangeYear.bind(this)}
+              year={this.state.year} 
+              start={this.state.startYear}
+              end={this.state.endYear}
+            />
+            <div className="map-mobile">
+              {this.renderMobileCards(this.state.wars)}
+            </div>
+        </div>
+        )
+      }
+    }
+
     const self = this;
     const config = {
       type: "map",
@@ -249,20 +365,55 @@ class App extends Component {
       }]
     };
 
-    if (this.state.selectedWar) {
+    if (this.state.year < 1790) {
+      const opacity = (1790 - this.state.year) / 10;
+
+      return (
+        <div className="App intro">
+          <h1><span className="fade" style={{ opacity: opacity}}>Civil Wars</span></h1>
+          <h4>
+            <span className="fade"  style={{ opacity: opacity }}>from </span> 
+            1800 <span className="fade" style={{ opacity: opacity }}>to today </span>
+          </h4>
+          <div className="floater fade" style={{ opacity: opacity}}>
+            <i className="fa fa-angle-double-down"></i>
+          </div>
+        </div>
+      );
+    } else if (this.state.year < 1800) {
+      const opacity = (1800 - this.state.year) / 10;
+      const height = (10 + (this.state.year - 1790) / 10 * 40).toString() + "vh";
+
+      return (
+        <div className="App intro">
+          <h1><span className="fade" style={{ opacity: 0 }}>Civil Wars</span></h1>
+          <div className="timeline-cursor-intro" style={{opacity: 1-opacity}}></div>
+          <div className="timeline-line-intro" style={{ 
+            opacity: 1-opacity,
+            height: height
+          }}></div>
+          <h4>
+            <span className="fade" style={{ opacity: 0 }}>from </span>
+            1800 <span className="fade"  style={{ opacity: 0 }}>to today </span>
+          </h4>
+      </div>
+      );
+    } else if (this.state.selectedWar) {
       return (
         <div className="App">
           <div className="map">
             <AmCharts.React style={{ width: "90%", height: "90vh" }} options={config} />
             <Card
               war={this.state.selectedWar}
+              isMobile={this.state.isMobile}
               x={this.state.selectedX}
               y={this.state.selectedY}
             />
           </div>
           <Timeline 
+            isMobile={this.state.isMobile}
             year={this.state.year} 
-            start={this.state.startYear}
+            start={this.state.startYear-20}
             end={this.state.endYear}
           />
         </div>
@@ -275,8 +426,9 @@ class App extends Component {
           <AmCharts.React style={{ width: "90%", height: "90vh" }} options={config} />
         </div>
         <Timeline 
+          isMobile={this.state.isMobile}
           year={this.state.year} 
-          start={this.state.startYear}
+          start={this.state.startYear-20}
           end={this.state.endYear}
         />
       </div>
