@@ -80,7 +80,7 @@ class App extends Component {
   toggleChangeYear(event, status) {
     if (status) { // clicked
       this.setState({ changeYearStatus: status, lastYear: this.state.year });
-    } else {
+    } else { // released
       const year = this.state.year;
       const lastYear = this.state.lastYear;
 
@@ -96,7 +96,7 @@ class App extends Component {
             if (wars[i].ended < year || wars[i].started > year) {
               const removedWar = wars.splice(i, 1);
               for (let j = areas.length - 1; j >= 0; j--) {
-                if (removedWar.name === areas[j].groupId) {
+                if (removedWar[0].name === areas[j].groupId) {
                   areas.splice(j, 1);
                 }
               }
@@ -147,10 +147,22 @@ class App extends Component {
 
   changeYear(event) {
     if (this.state.changeYearStatus) {
-      const timelineWidth = document.getElementById('mobile-line').offsetWidth;
-      const current = Math.min(event.clientX, timelineWidth);
-      const year = 1800 + Math.round((current / timelineWidth) * (this.state.endYear - this.state.startYear + 1));
-      this.setState({ year: year });
+      if (this.state.isMobile) {
+        const timelineWidth = document.getElementById('mobile-line').offsetWidth;
+        const current = Math.min(event.clientX, timelineWidth);
+        const year = (this.state.startYear + 
+                      Math.round((current / timelineWidth) * 
+                      (this.state.endYear - this.state.startYear + 1)));
+        this.setState({ year: year }); 
+      } else {
+        const timeline = document.getElementById('line');
+        const timelineHeight = timeline.offsetHeight;
+        const current = Math.min(event.clientY, timelineHeight + timeline.offsetTop);
+        const year = (this.state.startYear + 
+                      Math.round(((current-timeline.offsetTop) / timelineHeight) *
+                      (this.state.endYear - this.state.startYear + 1)));
+        this.setState({ year: year }); 
+        }
     }
   }
 
@@ -434,8 +446,10 @@ class App extends Component {
           </div>
           <Timeline 
             isMobile={this.state.isMobile}
+            changeYear={this.changeYear.bind(this)}
+            toggleChangeYear={this.toggleChangeYear.bind(this)}
             year={this.state.year} 
-            start={this.state.startYear-20}
+            start={this.state.startYear}
             end={this.state.endYear}
           />
         </div>
@@ -448,10 +462,12 @@ class App extends Component {
           <AmCharts.React style={{ width: "90%", height: "90vh" }} options={config} />
         </div>
         <Timeline 
-          isMobile={this.state.isMobile}
-          year={this.state.year} 
-          start={this.state.startYear-20}
-          end={this.state.endYear}
+              isMobile={this.state.isMobile}
+              changeYear={this.changeYear.bind(this)}
+              toggleChangeYear={this.toggleChangeYear.bind(this)}
+              year={this.state.year}
+              start={this.state.startYear}
+              end={this.state.endYear}
         />
       </div>
     );

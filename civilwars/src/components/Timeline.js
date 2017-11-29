@@ -19,22 +19,30 @@ class Timeline extends Component {
                 onMouseUp={(e) => this.props.toggleChangeYear(e, false)}
                 onMouseMove={this.props.changeYear}
             >
-              <div style={{ left: offset + "%" }} className="year-mobile">
-                  {this.props.year}
-              </div>
-              <div id="mobile-line" className="timeline-line-mobile"></div>
+                <div className="hoverable">
+                  <div style={{ left: offset + "%" }} className="year-mobile">
+                      {this.props.year}
+                  </div>
+                </div>
+                <div id="mobile-line" className="timeline-line-mobile"></div>
             </div>
           );
     }
 
     return (
-      <div className="timeline">
-        <div className="year" style={{ top: (YEAR_OFFSET + offset).toString() + "vh" }}>
-            {this.props.year}
+        <div className="timeline"
+          onMouseDown={(e) => this.props.toggleChangeYear(e, true)}
+          onMouseUp={(e) => this.props.toggleChangeYear(e, false)}
+          onMouseMove={this.props.changeYear}
+        >
+        <div className="hoverable">
+            <div className="year" style={{ top: (YEAR_OFFSET + offset).toString() + "vh" }}>
+                {this.props.year}
+            </div>
+            <div className="timeline-cursor" style={{ top: (CURSOR_OFFSET + offset).toString() + "vh" }}></div>
         </div>
-        <div className="timeline-cursor" style={{ top: (CURSOR_OFFSET + offset).toString() + "vh" }}></div>
-        <div className="timeline-line"></div>
-      </div>
+        <div id="line" className="timeline-line"></div>
+        </div>
     );
   }
 }
