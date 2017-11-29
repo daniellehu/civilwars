@@ -78,7 +78,71 @@ class App extends Component {
   }
 
   toggleChangeYear(event, status) {
-    this.setState({ changeYearStatus: status });
+    if (status) { // clicked
+      this.setState({ changeYearStatus: status, lastYear: this.state.year });
+    } else {
+      const year = this.state.year;
+      const lastYear = this.state.lastYear;
+
+      this.setState({ changeYearStatus: status, lastYear: year }, function() {
+        const self = this;
+        let wars = this.state.wars.slice();
+        let areas = this.state.areas.slice();
+        const addWars = [];
+
+        if (lastYear < year) { // if dragging time forward
+          // remove outdated civil wars
+          for (let i = wars.length - 1; i >= 0; i--) {
+            if (wars[i].ended < year || wars[i].started > year) {
+              const removedWar = wars.splice(i, 1);
+              for (let j = areas.length - 1; j >= 0; j--) {
+                if (removedWar.name === areas[j].groupId) {
+                  areas.splice(j, 1);
+                }
+              }
+            }
+          }
+                  
+          // add existing civil wars
+          for (let y = lastYear; y <= year; y++) {
+            if (self.state.startDates[y]) { 
+              for (let war of self.state.startDates[y]) {
+                if (war.ended >= year || !war.ended) {
+                  addWars.push(war);
+                }
+              }
+            }
+          }
+        } else { // if dragging time backwards
+          // remove all civil wars
+          wars = [];
+          areas = [];
+
+          // add all civil wars up to year
+          for (let y = self.state.startYear; y <= year; y++) {
+            if (self.state.startDates[y]) { 
+              for (let war of self.state.startDates[y]) {
+                if (war.ended >= year) {
+                  addWars.push(war);
+                }
+              }
+            }
+          }
+        }
+        wars = wars.concat(addWars);
+        
+        // update data for map
+        for (let addWar of addWars) {
+          const mapElem = self.generateMapElement(addWar);
+          areas = areas.concat(mapElem);
+        }
+
+        self.setState({
+          wars: wars,
+          areas: areas,
+        });
+      });
+    }
   }
 
   changeYear(event) {
@@ -86,49 +150,8 @@ class App extends Component {
       const timelineWidth = document.getElementById('mobile-line').offsetWidth;
       const current = Math.min(event.clientX, timelineWidth);
       const year = 1800 + Math.round((current / timelineWidth) * (this.state.endYear - this.state.startYear + 1));
-      this.setState({ year: year }, function() {
-        let wars = this.state.wars.slice();
-        let areas = this.state.areas.slice();
-
-        // remove outdated civil wars
-        for (let i = wars.length - 1; i >= 0; i--) {
-          if (wars[i].ended < year) {
-            const removedWar = wars.splice(i, 1);
-            for (let j = areas.length - 1; j >= 0; j--) {
-              if (removedWar.name === areas[j].groupId) {
-                areas.splice(j, 1);
-              }
-            }
-          }
-        }
-
-        // add existing civil wars
-        const addWars = [];
-        console.log(this.state.lastYear);
-        for (let y = this.state.lastYear; y < year; y++) {
-          if (this.state.startDates[y]) { 
-            for (let war of this.state.startDates[y]) {
-              if (war.ended >= this.state.year) {
-                addWars.push(war);
-              }
-            }
-          }
-        }
-        if (addWars) {
-          for (let addWar of addWars) {
-            const mapElem = this.generateMapElement(addWar);
-            areas = areas.concat(mapElem);
-          }
-          wars = wars.concat(addWars);
-        }
-
-        this.setState({
-          wars: wars,
-          areas: areas,
-          startYear: year,
-        });
-      });
-      }
+      this.setState({ year: year });
+    }
   }
 
   handleResize(event) {
@@ -137,7 +160,6 @@ class App extends Component {
 
   handleClick(event) {
     if (this.state.year < 1800 || this.state.isMobile) return;
-    
     if (event.target.id !== 'selected' &&
         event.target.parentElement.id !== 'selected' &&
         event.target.parentElement.parentElement.id !== 'selected') {
@@ -260,7 +282,7 @@ class App extends Component {
 
   renderMobileCards(wars) {
     return wars.map((war) => {
-      return <div key={war.name}>
+      return <div key={`${war.name}-${war.started}`}>
         <Card
           war={war}
           isMobile={this.state.isMobile}

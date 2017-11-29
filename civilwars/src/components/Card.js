@@ -12,6 +12,7 @@ class Card extends Component {
             locations = locations + location + ', ';
         }
         locations = locations.substring(0, locations.length - ', '.length) + " ";
+        const endDate = (this.props.war.ended) ? this.props.war.ended : 'Present';
         
         const casualties = (this.props.war.casualties) ? this.props.war.casualties : 'Unknown';
     
@@ -21,7 +22,7 @@ class Card extends Component {
     
             <p className="info">
                 <span className="bolded">{locations}</span> 
-                ({this.props.war.started}-{this.props.war.ended})
+                ({this.props.war.started}-{endDate})
             </p>
     
             <p className="info"><span className="bolded">Deaths:</span> {casualties}</p> 
@@ -51,6 +52,7 @@ class Card extends Component {
     locations = locations.substring(0, locations.length - ', '.length) + " ";
     
     const casualties = (this.props.war.casualties) ? this.props.war.casualties : 'Unknown';
+    const endDate = (this.props.war.ended) ? this.props.war.ended : 'Present';
 
     return (
       <div className="card" id="selected" style={{ left: left, top: top }}>
@@ -58,7 +60,7 @@ class Card extends Component {
 
         <p className="info">
             <span className="bolded">{locations}</span> 
-            ({this.props.war.started}-{this.props.war.ended})
+            ({this.props.war.started}-{endDate})
         </p>
 
         <p className="info"><span className="bolded">Deaths:</span> {casualties}</p> 
