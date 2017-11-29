@@ -181,7 +181,6 @@
   top: 12vh;
   height: 80vh;
   width: 4px;
-
   background-color: #ffffff;
 }
 
@@ -197,6 +196,11 @@
   z-index: 1;
   -webkit-transition: top 2s; /* Safari */
   transition: top 2s;
+}
+
+.hoverable:hover {
+  cursor: pointer;
+  opacity: 0.9;
 }
 
 .bolded {
@@ -224,6 +228,10 @@
 
 .link:hover {
   color: rgb(113, 180, 235);
+}
+
+.clickable {
+  cursor: pointer;
 }
 
 .floater {

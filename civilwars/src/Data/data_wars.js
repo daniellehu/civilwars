@@ -188,7 +188,7 @@ const civilwars = [
         started: 1898,
         ended: 1934,
         casualties: null,
-        locations: ['Panama, Cuba, Dominican Republic, Nicaragua, Mexico, Haiti, Honduras'],
+        locations: ['Panama', 'Cuba', 'Dominican Republic', 'Nicaragua', 'Mexico', 'Haiti', 'Honduras'],
         description: 'The Banana Wars were the occupations, police actions, and interventions on the part of the United States in Central America and the Caribbean between the end of the Spanish–American War in 1898 and the inception of the Good Neighbor Policy in 1934.',
         wiki: 'https://en.wikipedia.org/wiki/Banana_Wars',
     }, {
