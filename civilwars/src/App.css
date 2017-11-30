@@ -234,9 +234,26 @@
   cursor: pointer;
 }
 
+.floater-mobile {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  color: white;
+  font-size: 2em;
+
+  -webkit-transition: top 0.5s; /* Safari */
+  transition: top 0.5s;
+  animation: floatmobile 1s infinite;
+}
+
+@keyframes floatmobile {
+  0% {top: 50vh;}
+  50% {top: 50.2vh;}
+  100% {top: 50vh;}
+}
+
 .floater {
   position: absolute;
-  top: 90vh;
   width: 100%;
   text-align: center;
   color: white;

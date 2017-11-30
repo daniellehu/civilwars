@@ -316,7 +316,7 @@ class App extends Component {
             <span className="fade"  style={{ opacity: opacity }}>from </span> 
             1800 <span className="fade" style={{ opacity: opacity }}>to today </span>
           </h4>
-          <div className="floater clickable" 
+          <div className="floater-mobile clickable" 
                onClick={() => this.setState({year: 1800, lastYear: 1800})}>
             <i className="fa fa-angle-double-right clickable"></i></div>
         </div>
