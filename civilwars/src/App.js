@@ -149,7 +149,13 @@ class App extends Component {
     if (this.state.changeYearStatus) {
       if (this.state.isMobile) {
         const timelineWidth = document.getElementById('mobile-line').offsetWidth;
-        const current = Math.min(event.clientX, timelineWidth);
+        let x;
+        if (event.changedTouches) {
+          x = event.changedTouches[0].clientX;
+        } else {
+          x = event.clientX;
+        }
+        const current = Math.min(x, timelineWidth);
         const year = (this.state.startYear + 
                       Math.round((current / timelineWidth) * 
                       (this.state.endYear - this.state.startYear + 1)));

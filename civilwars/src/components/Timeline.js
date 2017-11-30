@@ -18,8 +18,8 @@ class Timeline extends Component {
                 onMouseDown={(e) => this.props.toggleChangeYear(e, true)}
                 onMouseUp={(e) => this.props.toggleChangeYear(e, false)}
                 onMouseMove={this.props.changeYear}
-                onTouchDown={(e) => this.props.toggleChangeYear(e, true)}
-                onTouchUp={(e) => this.props.toggleChangeYear(e, false)}
+                onTouchStart={(e) => this.props.toggleChangeYear(e, true)}
+                onTouchEnd={(e) => this.props.toggleChangeYear(e, false)}
                 onTouchMove={this.props.changeYear}
             >
                 <div className="hoverable">
