@@ -132,7 +132,7 @@ const civilwars = [
         started: 1867,
         ended: 1874,
         casualties: null,
-        locations: ['Selangor'],
+        locations: ['Malaysia'],
         description: 'The Klang War or Selangor Civil War was a series of conflicts that lasted from 1867 to 1874 in the Malay state of Selangor.',
         wiki: 'https://en.wikipedia.org/wiki/Klang_War',
     }, {
@@ -468,7 +468,7 @@ const civilwars = [
         started: 1960,
         ended: 1965,
         casualties: 100000,
-        locations: ['Democratic Republic of the Congo'],
+        locations: ['Congo, Democratic Republic'],
         description: "The Congo Crisis (French: Crise congolaise) was a period of political upheaval and conflict in the Republic of the Congo (today the Democratic Republic of the Congo) between 1960 and 1965.",
         wiki: 'https://en.wikipedia.org/wiki/Congo_Crisis',
     }, {
@@ -516,7 +516,7 @@ const civilwars = [
         started: 1964,
         ended: 1979,
         casualties: 19619,
-        locations: ['Rhodesia', 'Zambia', 'Mozambique'],
+        locations: ['Zimbabwe', 'Zambia', 'Mozambique'],
         description: " The conflict pitted three forces against one another: the Rhodesian government, led by Ian Smith (later the Zimbabwe-Rhodesian government of Bishop Abel Muzorewa); the Zimbabwe African National Liberation Army, the military wing of Robert Mugabe's Zimbabwe African National Union; and the Zimbabwe People's Revolutionary Army of Joshua Nkomo's Zimbabwe African People's Union.",
         wiki: 'https://en.wikipedia.org/wiki/Rhodesian_Bush_War',
     }, {
@@ -636,7 +636,7 @@ const civilwars = [
         started: 1983,
         ended: 2005,
         casualties: 2000000,
-        locations: ['Sudan'],
+        locations: ['South Sudan'],
         description: "The Second Sudanese Civil War was a conflict from 1983 to 2005 between the central Sudanese government and the Sudan People's Liberation Army. It was largely a continuation of the First Sudanese Civil War of 1955 to 1972.",
         wiki: 'https://en.wikipedia.org/wiki/Second_Sudanese_Civil_War',
     }, {
@@ -780,7 +780,7 @@ const civilwars = [
         started: 1996,
         ended: 1997,
         casualties: 800000,
-        locations: ['Democratic Republic of the Congo'],
+        locations: ['Congo, Democratic Republic'],
         description: "The First Congo War (1996–1997) was a foreign invasion of Zaire led by Rwanda that replaced President Mobutu Sésé Seko with the rebel leader Laurent-Désiré Kabila. Destabilization in eastern Zaire resulting from the Rwandan Genocide was the final factor that caused numerous internal and external factors to align against the corrupt and inept government in the capital, Kinshasa.",
         wiki: 'https://en.wikipedia.org/wiki/First_Congo_War',
     }, {
@@ -812,7 +812,7 @@ const civilwars = [
         started: 1997,
         ended: 1999,
         casualties: 20050,
-        locations: ['Democratic Republic of the Congo'],
+        locations: ['Congo, Democratic Republic'],
         description: "The Second Republic of the Congo Civil War was an ethnopolitical civil conflict in the African state of Republic of the Congo, beginning on 5 June 1997 and continuing until December 1999.",
         wiki: 'https://en.wikipedia.org/wiki/Republic_of_the_Congo_Civil_War_(1997%E2%80%9399)',
     }, {
@@ -836,7 +836,7 @@ const civilwars = [
         started: 1998,
         ended: 2003,
         casualties: 5756000,
-        locations: ['Democratic Republic of the Congo'],
+        locations: ['Congo, Democratic Republic'],
         description: "The Second Congo War began in August 1998 in the Democratic Republic of the Congo, little more than a year after the First Congo War, and involved some of the same issues.",
         wiki: 'https://en.wikipedia.org/wiki/Second_Congo_War',
     }, {
@@ -908,7 +908,7 @@ const civilwars = [
         started: 2006,
         ended: null,
         casualties: 600,
-        locations: ['Gaza Strip'],
+        locations: ['Palestinian Territory, Occupied', 'Gaza Strip'],
         description: "The Fatah–Hamas conflict (Arabic: النزاع بين فتح وحماس‎ an-Nizāʿ bayna Fataḥ wa-Ḥamās), also referred to as the Palestinian Civil War (Arabic: الحرب الأهلية الفلسطينية‎ al-Ḥarb al-ʾAhliyyah al-Filisṭīnīyyah), was a conflict between the two main Palestinian political parties, Fatah and Hamas, resulting in the split of the Palestinian Authority in 2007.",
         wiki: 'https://en.wikipedia.org/wiki/Fatah%E2%80%93Hamas_conflict',
     }, {
@@ -988,7 +988,7 @@ const civilwars = [
         started: 2012,
         ended: 2013,
         casualties: 1449,
-        locations: ['Democratic Republic of the Congo'],
+        locations: ['Congo, Democratic Republic'],
         description: "The M23 rebellion was fighting in North Kivu, Democratic Republic of the Congo (DRC), that occurred between the March 23 Movement and government forces.",
         wiki: 'https://en.wikipedia.org/wiki/M23_rebellion',
     }, {
@@ -1036,7 +1036,7 @@ const civilwars = [
         started: 2003,
         ended: null,
         casualties: 300000,
-        locations: ['Sudan',],
+        locations: ['Sudan'],
         description: "The War in Darfur is a major armed conflict in the Darfur region of Sudan, that began in February 2003 when the Sudan Liberation Movement (SLM) and the Justice and Equality Movement (JEM) rebel groups began fighting the government of Sudan, which they accused of oppressing Darfur's non-Arab population.",
         wiki: 'https://en.wikipedia.org/wiki/War_in_Darfur',
     }, {
@@ -1060,7 +1060,7 @@ const civilwars = [
         started: 2008,
         ended: null,
         casualties: 2500,
-        locations: ['Sudan'],
+        locations: ['Sudan', 'South Sudan'],
         description: "Sudanese nomadic conflicts are non-state conflicts between rival nomadic tribes taking place in the territory of Sudan and, since 2011, South Sudan.",
         wiki: 'https://en.wikipedia.org/wiki/Sudanese_nomadic_conflicts',
     }, {
@@ -1092,7 +1092,7 @@ const civilwars = [
         started: 2013,
         ended: null,
         casualties: 300000,
-        locations: ['Sudan'],
+        locations: ['South Sudan'],
         description: "The South Sudanese Civil War (sometimes known as the Third Sudanese Civil War) is a conflict in South Sudan between forces of the government and opposition forces.",
         wiki: 'https://en.wikipedia.org/wiki/South_Sudanese_Civil_War',
     }, {
