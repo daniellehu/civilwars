@@ -208,7 +208,7 @@ const isoCountries = {
     'Spain': 'ES',
     'Sri Lanka': 'LK',
     'Sudan': 'SD',
-    'South Sudan': 'SSD',
+    'South Sudan': 'SS',
     'Suriname': 'SR',
     'Svalbard And Jan Mayen': 'SJ',
     'Swaziland': 'SZ',
